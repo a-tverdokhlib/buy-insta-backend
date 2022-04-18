@@ -40,11 +40,26 @@ const getCategory = catchAsync(
 
 const getCategoryServices = catchAsync(
     async (req, res) => {
-        const items = await serviceService.list({categoryId: {$eq: req.params.id}});
-        if (!items) {
-            throw new ApiError(httpStatus.NOT_FOUND, 'NO_PRODUCT_ITEMS');
+        const category = await categoryService.getById(req.params.id)
+        if (category.urlSlug === 'instagram-growth') {
+            const items = await serviceService.growPacks({})
+            if (!items) {
+                throw new ApiError(httpStatus.NOT_FOUND, 'NO_GROW_PACKS');
+            }
+            res.send(items);
+        } else if (category.urlSlug === 'buy-auto-instagram-likes') {
+            const items = await serviceService.autoPacks({})
+            if (!items) {
+                throw new ApiError(httpStatus.NOT_FOUND, 'NO_AUTO_PACKS');
+            }
+            res.send(items);
+        } else {
+            const items = await serviceService.list({categoryId: {$eq: req.params.id}});
+            if (!items) {
+                throw new ApiError(httpStatus.NOT_FOUND, 'NO_PRODUCT_ITEMS');
+            }
+            res.send(items);
         }
-        res.send(items);
     }
 )
 
