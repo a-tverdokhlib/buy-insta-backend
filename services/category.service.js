@@ -1,5 +1,6 @@
 import httpStatus from "http-status";
 import { Category } from "../models/category.model.js";
+import { OtherService } from "../models/otherService.model.js";
 import ApiError from "../utils/ApiError.js";
 
 const create = async (body) => {
@@ -31,8 +32,17 @@ const getBySlug = async (slug) => {
     }
     return record;
 }
+
+const storyViews = async () => {
+    const record = OtherService.findOne({});
+    if (!record) {
+        throw new ApiError(httpStatus.NOT_FOUND, 'RECORD_NOT_FOUND');
+    }
+    return record;
+}
+
 const categoryService = {
-    create, list, slugs, getById, getBySlug
+    create, list, slugs, storyViews, getById, getBySlug
 }
 
 

@@ -14,11 +14,19 @@ const getCategories = catchAsync(
             res.send(category);
     
         } else if(req.query.type === 'slug') {
-            const category = await categoryService.getBySlug(req.query.slug);
-            if (!category) {
-                throw new ApiError(httpStatus.NOT_FOUND, 'INVALID_CATEGORY');
+            if (req.query.slug === 'buy-instagram-story-views') {
+                const category = await categoryService.storyViews();
+                if (!category) {
+                    throw new ApiError(httpStatus.NOT_FOUND, 'INVALID_CATEGORY');
+                }
+                res.send(category);
+            } else {
+                const category = await categoryService.getBySlug(req.query.slug);
+                if (!category) {
+                    throw new ApiError(httpStatus.NOT_FOUND, 'INVALID_CATEGORY');
+                }
+                res.send(category);
             }
-            res.send(category);
         } else {
             const results = await categoryService.list({});
             res.status(httpStatus.CREATED).send(results);
@@ -53,7 +61,15 @@ const getCategoryServices = catchAsync(
                 throw new ApiError(httpStatus.NOT_FOUND, 'NO_AUTO_PACKS');
             }
             res.send(items);
-        } else {
+        } 
+        // else if (category.urlSlug === 'buy-instagram-story-views') {
+        //     const items = await serviceService.storyViews({})
+        //     if (!items) {
+        //         throw new ApiError(httpStatus.NOT_FOUND, 'NO_STORY_VIEWS_FOUND');
+        //     }
+        //     res.send(items);
+        // } 
+        else {
             const items = await serviceService.list({categoryId: {$eq: req.params.id}});
             if (!items) {
                 throw new ApiError(httpStatus.NOT_FOUND, 'NO_PRODUCT_ITEMS');

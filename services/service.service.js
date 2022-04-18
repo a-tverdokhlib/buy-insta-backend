@@ -2,7 +2,7 @@ import httpStatus from "http-status";
 import { Service } from "../models/service.model.js";
 import { GrowPack } from "../models/growth.model.js";
 import { AutoLikePack } from "../models/autoLike.model.js";
-
+import { OtherService } from "../models/otherService.model.js";
 import ApiError from "../utils/ApiError.js";
 
 const create = async (body) => {
@@ -21,6 +21,11 @@ const growPacks = async(filter) => {
 
 const autoPacks = async(filter) => {
     const items = await AutoLikePack.find(filter);
+    return items;
+}
+
+const storyViews = async(filter) => {
+    const items = await OtherService.find(filter);
     return items;
 }
 
@@ -46,7 +51,7 @@ const getBySlug = async (slug) => {
 }
 
 const serviceService = {
-    create, list, growPacks, autoPacks, slugs, getById, getBySlug
+    create, list, growPacks, autoPacks, storyViews, slugs, getById, getBySlug
 }
 
 
